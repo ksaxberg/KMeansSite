@@ -107,23 +107,6 @@
  newImg = uint8(newImg);
  end
  
- function [distance] = euclidDistance(vector1, vector2)
-    distance = sqrt(sum((vector1-vector2).^2));
- end
- 
- function [closest_key, closest_distance] = closest(keypoint, collection, distanceMetric)
- closest_key = 1;
- closest_distance = distanceMetric(keypoint(5:end), collection(closest_key,5:end));
- for iter_ = 2:length(collection)
- temp_dist = distanceMetric(keypoint(5:end), collection(iter_, 5:end));
- if temp_dist < closest_distance
- closest_key = iter_;
- closest_distance = temp_dist;
- end
- end
- end
- 
- 
  
  end
 */
@@ -192,7 +175,8 @@ function partitionImage(k, lambda, rows, cols, matrix, clusters){
                     min_dist = dist;
                     min_index = i;
                     }
-            collections.push(imgVec);
+            }
+            collections[min_index].push(imgVec);
         }
     }
     return collections;
@@ -233,7 +217,7 @@ function colorWithCluster(matrix, cluster, collections){
     for (i=0;i<collections.length;i++){
         for(j=0;j<collections[i].length;i++){
             var vec = collections[i][j];
-            matrix[vec[0]][vec[1]] = [vec[3],vec[4],vec[5]];
+            matrix[vec[0]][vec[1]]=[cluster[i][3],cluster[i][4],cluster[i][5]];
         }
     }
     return matrix;
@@ -263,7 +247,7 @@ function kmeans(matrix, k, T, lambda){
     }
 
     // Use matrix or newImg to create image output
-    colorWithCluster(matrix, cluster, collections);
+    colorWithCluster(matrix, clusters, collections);
 }
 
 function imageAnalysis(){
