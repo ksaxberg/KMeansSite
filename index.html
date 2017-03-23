@@ -5,6 +5,26 @@
 <script src="kmeans.js"></script>
 </head>
 <body>
-<div id="main"> </div>
+<div id="main">
+    <!-- Display image that has been uploaded at top of page -->
+    <pre id="uploadImageDisplayArea">
+        
+    </pre>
+
+    <!-- Selection and Navigation -->
+    <div id="contentUpload" >
+        <p><button type="button" onclick="upload()">Upload Image</button></p>
+        <input type="file" id="imageInput">
+
+        K for KMeans: <input id="kForKmeans" type="text" name="k"><br>
+        Number of Iterations for KMeans: <input id="iterForKmeans" type="text" name="iter"><br>
+        <button type="button" onclick="runKMeans()">Run KMeans</button>
+    </div>
+
+    <!--  Display Processed Image below input    -->
+    <div id="processedImageDisplayArea">
+
+    </div>
+</div>
 </body>
 </html>
