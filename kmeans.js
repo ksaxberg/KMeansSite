@@ -250,17 +250,68 @@ function kmeans(matrix, k, T, lambda){
     colorWithCluster(matrix, clusters, collections);
 }
 
-function imageAnalysis(){
+
+function runKMeans(){
+    
     var k = parseInt(document.getElementById("kForKMeans").value);
     var T = parseInt(document.getElementById("iterForKMeans").value);
     var lambda = parseInt(document.getElementById("lambdaForKMeans").value);
-
-    var imageMatrix;
-    //TODO: Somehow put the image into that matrix
-    kmeans(imageMatrix, k, T, lambda);
-    //TODO: Hey hit that matrix into an image
-
+    
+    console.log('running kmeans');
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+    var matrix = new Array();
+    var imgWidth = img.width;
+    var imgHeight = img.height;
+    context.canvas.width = imgWidth;
+    context.canvas.height = imgHeight;
+    
+    context.drawImage(img, 0, 0);
+    
+    var imageData = context.getImageData(0, 0, imgWidth, imgHeight);
+    var data = imageData.data;
+    
+    //fill matrix with nothing
+    for (var i = 0; i < imgWidth; i++){
+        matrix[i] = new Array();
+        for(var j = 0; j < imgHeight; j++){
+            matrix[i][j] = new Array();
+        }
+    }
+    
+    var curPixel = 0;
+    
+    //populate matrix with pixel data
+    for(var i = 0; i < imgWidth; i++){
+        for(var j = 0; j < imgHeight; j++){
+            for(var k = 0; k < 4; k++){
+                matrix[i][j].push(data[curPixel]);
+                curPixel++;
+            }
+        }
+    }
+    
+    console.log('first pixel: red: ' + matrix[0][0][0]);
+    console.log(imgWidth);
+    console.log(imgHeight);
+    console.log(matrix.length);
+    console.log(matrix[0].length);
+    console.log(matrix[0][0].length);
+    console.log((imgWidth/2)-1);
+    console.log((imgHeight/2)-1);
+    console.log('last pixel: red: ' + matrix[260][260][0]);
+    console.log('last pixel: green: ' + matrix[260][260][1]);
+    console.log('last pixel: blue: ' + matrix[260][260][2]);
+    
+    kmeans(matrix, k, T, lambda);
+    
+    var outputArea = document.getElementById("processedImageDisplayArea");
+    var imgOut = document.createElement("img");
+    imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
+    outputArea.appendChild(imgOut);
 }
+
+var img;
 
 
 window.onload = function(){
@@ -278,7 +329,7 @@ window.onload = function(){
                fileDisplayArea.innerHTML = "";
 
                // Create a new image.
-               var img = new Image();
+               img = new Image();
                // Set the img src property using the data URL.
                img.src = reader.result;
                
