@@ -280,6 +280,9 @@ function runKMeans(){
         console.log("kVal: " + kVal);
         console.log('running kmeans');
     }
+    console.log("kVal: " + kVal);
+    
+    console.log('running kmeans');
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
     var matrix = new Array();
