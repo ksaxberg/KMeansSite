@@ -146,7 +146,7 @@ function distanceMeasure(){
         // Euclidean Distance Metric
         // Assuming vectors same size
         var sum = 0;
-        for (i=0;i<vec.length;i++){
+        for (i=0;i<vec1.length;i++){
             sum += (vec1[i]-vec2[i])*(vec1[i]-vec2[i]);
         }
         return Math.sqrt(sum);
