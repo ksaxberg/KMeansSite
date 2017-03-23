@@ -265,7 +265,7 @@ function kmeans(matrix, k, T, lambda){
     }
 
     // Use matrix or newImg to create image output
-    colorWithCluster(matrix, clusters, collections);
+    return colorWithCluster(matrix, clusters, collections);
 }
 
 
@@ -274,6 +274,7 @@ function runKMeans(){
     var kVal = parseInt(document.getElementById("kForKMeans").value);
     var T = parseInt(document.getElementById("iterForKMeans").value);
     var lambda = parseInt(document.getElementById("lambdaForKMeans").value);
+    console.log("kVal: " + kVal);
     
     console.log('running kmeans');
     var canvas = document.getElementById('myCanvas');
@@ -322,19 +323,37 @@ function runKMeans(){
         //console.log('last pixel: blue: ' + matrix[260][260][2]);
     }
     
-    kmeans(matrix, kVal, T, lambda);
+    matrix = kmeans(matrix, kVal, T, lambda);
+    
+    console.log("kmeans finished");
+    
+    var imgData = new ImageData(imgWidth, imgHeight);
+    curPixel = 0;
+    
+    //write matrix into 1D array
+    for(var i = 0; i < imgWidth; i++){
+        for(var j = 0; j < imgHeight; j++){
+            for(var k = 0; k < 4; k++){
+                imgData.data[curPixel] = matrix[i][j][k];
+                curPixel++;
+            }
+        }
+    }
     
     var outputArea = document.getElementById("processedImageDisplayArea");
     var imgOut = document.createElement("img");
     //imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
     //TODO: Need to take the output matrix to the image
-    imgOut.src = canvas.toDataURL(matrix, 1.0); // full quality
+    context.putImageData(imgData, 0, 0);
+    imgOut.src = canvas.toDataURL(); // full quality
     outputArea.appendChild(imgOut);
+
 }
+
 
 var img;
 
-var debug = true;
+var debug = false;
 
 window.onload = function(){
     var fileInput = document.getElementById('imageInput');
