@@ -351,6 +351,8 @@ function runKMeans(){
     //imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
     //TODO: Need to take the output matrix to the image
     context.putImageData(imgData, 0, 0);
+    imgOut.src = canvas.toDataURL(); // full quality
+    outputArea.appendChild(imgOut);
 
 }
 

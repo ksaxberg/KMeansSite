@@ -7,23 +7,27 @@
 <body>
 <div id="main">
     <!-- Display image that has been uploaded at top of page -->
+    <p>Original:</p>
     <pre id="uploadImageDisplayArea">
     </pre>
 
     <!-- Selection and Navigation -->
     <div id="contentUpload" >
-        <p><button type="button" onclick="upload()">Upload Image</button></p>
+        
         <input type="file" id="imageInput">
 
         K for KMeans: <input id="kForKMeans" type="text" name="k"><br>
         Number of Iterations for KMeans: <input id="iterForKMeans" type="text" name="iter"><br>
         Lambda for KMeans: <input id="lambdaForKMeans" type="text" name="lambda"><br>
         <button type="button" onclick="runKMeans()">Run KMeans</button>
+        <br/>Output:
     </div>
 
     <!--  Display Processed Image below input    -->
+    
+    <canvas id="myCanvas"></canvas>
+    <p><br/>Previous Results:</p>
     <div id="processedImageDisplayArea">
-            <canvas id="myCanvas"></canvas>
     </div>
 </div>
 <footer>
