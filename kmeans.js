@@ -182,7 +182,7 @@ function partitionImage(k, lambda, rows, cols, matrix, clusters){
                     min_index = z;
                 }
             }
-            collections[min_index].push(imgVec);
+            collections[min_index].push([imgVec, [i, j]]);
         }
     }
     return collections;
@@ -203,7 +203,7 @@ function dealWithCollections(clusters, collections){
         var green_sum = 0;
         var blue_sum = 0;
         for (var j=0;j<vectorSize;j++){
-            var imgVec = collections[i][j];
+            var imgVec = collections[i][j][0];
             x_sum += imgVec[0];
             y_sum += imgVec[1];
             red_sum += imgVec[2];
@@ -221,7 +221,7 @@ function dealWithCollections(clusters, collections){
     return newClusters;
 }
 
-function colorWithCluster(matrix, cluster, collections){
+function colorWithCluster(matrix, cluster, collections, lambda){
     // Editing the given matrix
     if (debug) {
         console.log("KMeans coloring image");
@@ -229,7 +229,9 @@ function colorWithCluster(matrix, cluster, collections){
     for (var i=0;i<collections.length;i++){
         for(var j=0;j<collections[i].length;j++){
             var vec = collections[i][j];
-            matrix[vec[0]][vec[1]]=[cluster[i][2],cluster[i][3],cluster[i][4]];
+            var imgVec = vec[0];
+            var indices = vec[1];
+            matrix[indices[0]][indices[1]]=[cluster[i][2],cluster[i][3],cluster[i][4], matrix[indices[0]][indices[1]][3]];
         }
     }
     return matrix;
@@ -265,7 +267,7 @@ function kmeans(matrix, k, T, lambda){
     }
 
     // Use matrix or newImg to create image output
-    colorWithCluster(matrix, clusters, collections);
+    return colorWithCluster(matrix, clusters, collections);
 }
 
 
@@ -274,8 +276,10 @@ function runKMeans(){
     var kVal = parseInt(document.getElementById("kForKMeans").value);
     var T = parseInt(document.getElementById("iterForKMeans").value);
     var lambda = parseInt(document.getElementById("lambdaForKMeans").value);
-    
-    console.log('running kmeans');
+    if(debug){
+        console.log("kVal: " + kVal);
+        console.log('running kmeans');
+    }
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
     var matrix = new Array();
@@ -322,19 +326,37 @@ function runKMeans(){
         //console.log('last pixel: blue: ' + matrix[260][260][2]);
     }
     
-    kmeans(matrix, kVal, T, lambda);
+    matrix = kmeans(matrix, kVal, T, lambda);
+    
+    if(debug){console.log("kmeans finished")};
+    
+    var imgData = new ImageData(imgWidth, imgHeight);
+    curPixel = 0;
+    
+    //write matrix into 1D array
+    for(var i = 0; i < imgWidth; i++){
+        for(var j = 0; j < imgHeight; j++){
+            for(var k = 0; k < 4; k++){
+                imgData.data[curPixel] = matrix[i][j][k];
+                curPixel++;
+            }
+        }
+    }
     
     var outputArea = document.getElementById("processedImageDisplayArea");
     var imgOut = document.createElement("img");
     //imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
     //TODO: Need to take the output matrix to the image
-    imgOut.src = canvas.toDataURL(matrix, 1.0); // full quality
+    context.putImageData(imgData, 0, 0);
+    imgOut.src = canvas.toDataURL(); // full quality
     outputArea.appendChild(imgOut);
+
 }
+
 
 var img;
 
-var debug = true;
+var debug = false;
 
 window.onload = function(){
     var fileInput = document.getElementById('imageInput');
