@@ -280,8 +280,8 @@ function imageAnalysis(){
 
 
 window.onload = function(){
-    var fileInput = document.getElementById('fileInput');
-    var fileDisplay = document.getElementById('fileDisplayArea');
+    var fileInput = document.getElementById('imageInput');
+    var fileDisplayArea = document.getElementById('uploadImageDisplayArea');
     
     fileInput.addEventListener('change', function(e) {
        var file = fileInput.files[0];
