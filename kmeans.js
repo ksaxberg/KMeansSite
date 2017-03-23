@@ -116,7 +116,7 @@ function initialGuesses(k, lambda, rows, cols, matrix){
     var usedRows = [];
     var usedCols = [];
     var randInt = function(upperBound){return Math.floor(Math.random()*upperBound);};
-    for( i = 0; i < k; i++){
+    for(var i = 0; i < k; i++){
         var randRow = randInt(rows);
         // Not a row we have used before
         while(usedRows.includes(randRow)){
@@ -128,13 +128,13 @@ function initialGuesses(k, lambda, rows, cols, matrix){
             randCol = randInt(rows);
         }
         var color = matrix[randRow][randCol];
-        guesseroo.push([randRow*lambda, randCol*lambda].concat(color));
+        guesseroo.push([randRow*lambda, randCol*lambda, color[0], color[1], color[2]]);
     
     }
     return guesseroo;
 }
 
-function distanceMeasure(){
+function distanceMeasure(vec1, vec2){
     // Purpose: Provide a distance calculation between two given vectors
     //          Implemented this way to change which distance is being used.
     //
@@ -142,15 +142,13 @@ function distanceMeasure(){
     //      A specified function that implements distance.
     
     
-    return function(vec1, vec2){
         // Euclidean Distance Metric
         // Assuming vectors same size
         var sum = 0;
-        for (i=0;i<vec1.length;i++){
+        for (var i=0;i<vec1.length;i++){
             sum += (vec1[i]-vec2[i])*(vec1[i]-vec2[i]);
         }
         return Math.sqrt(sum);
-    };
 }
 
 function partitionImage(k, lambda, rows, cols, matrix, clusters){
@@ -162,19 +160,27 @@ function partitionImage(k, lambda, rows, cols, matrix, clusters){
     // Returns: 
     //      Collection of vectors from the image, each collection is indexed
     //        as it refers to the cluster all those vectors are "closest" to.
+    if(debug){
+        console.log("KMeans partitioning image");
+    }
     var collections = [];
-    var distance = distanceMeasure();
-    for(i=0;i<rows;i++){
-        for(j=0;j<cols;j++){
+    for (var i=0;i<k;i++){
+        collections.push([]);
+    }
+    for(var i=0;i<rows;i++){
+        if(debug){
+            console.log("KMeans partitioning image on row "+i);
+        }
+        for(var j=0;j<cols;j++){
             var min_dist = Infinity;
             var min_index = -1;
-            var imgVec = [i*lambda, j*lambda].concat(matrix[i][j]);
-            for(z=0;z<clusters.length;z++){
-                var dist = distance(imgVec, clusters[i]);
+            var imgVec = [i*lambda, j*lambda, matrix[i][j][0], matrix[i][j][1], matrix[i][j][2]];
+            for(var z=0;z<clusters.length;z++){
+                var dist = distanceMeasure(imgVec, clusters[z]);
                 if(dist < min_dist) {
                     min_dist = dist;
-                    min_index = i;
-                    }
+                    min_index = z;
+                }
             }
             collections[min_index].push(imgVec);
         }
@@ -185,15 +191,18 @@ function partitionImage(k, lambda, rows, cols, matrix, clusters){
 function dealWithCollections(clusters, collections){
     //Calculate new clusters based on assignments to collections
     // so that clusters represent averages of the collections.
+    if (debug){
+        console.log("KMeans calculating new clusters");
+    }
     var newClusters = [];
-    for (i=0;i<collections.length;i++){
+    for (var i=0;i<collections.length;i++){
         var vectorSize = collections[i].length;
         var x_sum = 0;
         var y_sum = 0;
         var red_sum = 0;
         var green_sum = 0;
         var blue_sum = 0;
-        for (j=0;j<vectorSize;j++){
+        for (var j=0;j<vectorSize;j++){
             var imgVec = collections[i][j];
             x_sum += imgVec[0];
             y_sum += imgVec[1];
@@ -214,10 +223,13 @@ function dealWithCollections(clusters, collections){
 
 function colorWithCluster(matrix, cluster, collections){
     // Editing the given matrix
-    for (i=0;i<collections.length;i++){
-        for(j=0;j<collections[i].length;i++){
+    if (debug) {
+        console.log("KMeans coloring image");
+    }
+    for (var i=0;i<collections.length;i++){
+        for(var j=0;j<collections[i].length;j++){
             var vec = collections[i][j];
-            matrix[vec[0]][vec[1]]=[cluster[i][3],cluster[i][4],cluster[i][5]];
+            matrix[vec[0]][vec[1]]=[cluster[i][2],cluster[i][3],cluster[i][4]];
         }
     }
     return matrix;
@@ -240,8 +252,14 @@ function kmeans(matrix, k, T, lambda){
     var cols = matrix[0].length;
 
     var clusters = initialGuesses(k, lambda, rows, cols, matrix);
+    if (debug) {
+        console.log("Clusters is: "+clusters);
+    }
     var collections;
-    for(i=0;i<T;i++){
+    for(var i=0;i<T;i++){
+        if (debug){
+            console.log("K-Means on Iteration "+i+" of "+T);
+        }
         collections = partitionImage(k, lambda, rows, cols, matrix, clusters);
         clusters = dealWithCollections(clusters, collections);
     }
@@ -253,7 +271,7 @@ function kmeans(matrix, k, T, lambda){
 
 function runKMeans(){
     
-    var k = parseInt(document.getElementById("kForKMeans").value);
+    var kVal = parseInt(document.getElementById("kForKMeans").value);
     var T = parseInt(document.getElementById("iterForKMeans").value);
     var lambda = parseInt(document.getElementById("lambdaForKMeans").value);
     
@@ -290,29 +308,33 @@ function runKMeans(){
             }
         }
     }
+    if(debug){    
+        console.log('first pixel: red: ' + matrix[0][0][0]);
+        console.log(imgWidth);
+        console.log(imgHeight);
+        console.log(matrix.length);
+        console.log(matrix[0].length);
+        console.log(matrix[0][0].length);
+        console.log((imgWidth/2)-1);
+        console.log((imgHeight/2)-1);
+        //console.log('last pixel: red: ' + matrix[260][260][0]);
+        //console.log('last pixel: green: ' + matrix[260][260][1]);
+        //console.log('last pixel: blue: ' + matrix[260][260][2]);
+    }
     
-    console.log('first pixel: red: ' + matrix[0][0][0]);
-    console.log(imgWidth);
-    console.log(imgHeight);
-    console.log(matrix.length);
-    console.log(matrix[0].length);
-    console.log(matrix[0][0].length);
-    console.log((imgWidth/2)-1);
-    console.log((imgHeight/2)-1);
-    console.log('last pixel: red: ' + matrix[260][260][0]);
-    console.log('last pixel: green: ' + matrix[260][260][1]);
-    console.log('last pixel: blue: ' + matrix[260][260][2]);
-    
-    kmeans(matrix, k, T, lambda);
+    kmeans(matrix, kVal, T, lambda);
     
     var outputArea = document.getElementById("processedImageDisplayArea");
     var imgOut = document.createElement("img");
-    imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
+    //imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
+    //TODO: Need to take the output matrix to the image
+    imgOut.src = canvas.toDataURL(matrix, 1.0); // full quality
     outputArea.appendChild(imgOut);
 }
 
 var img;
 
+var debug = true;
 
 window.onload = function(){
     var fileInput = document.getElementById('imageInput');
