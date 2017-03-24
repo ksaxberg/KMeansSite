@@ -13,3 +13,7 @@ body {
 footer{
     text-align: center;
 }
+
+.imgScale {
+    max-width: 700px;
+}
