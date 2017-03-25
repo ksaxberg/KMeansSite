@@ -1,5 +1,5 @@
 body {
-    background-color: #e6e6ff ;
+    background-color: #f4f6ff ;
 }
 
 #main {
@@ -9,6 +9,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     padding: 5px;
+    border-radius: 5px;
 }
 footer{
     text-align: center;
@@ -16,6 +17,10 @@ footer{
 
 .imgScale {
     width: 700px;
+}
+.imgScaleMax {
+
+	max-width: 700px;
 }
 
 .imgInput{

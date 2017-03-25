@@ -78,15 +78,13 @@ function runKMeans(){
     //TODO: Need to take the output matrix to the image
     context.putImageData(imgData, 0, 0);
     imgOut.src = canvas.toDataURL("image/jpeg"); // full quality
-    imgOut.setAttribute("class", "imgScale");
     // Placing the child 
-    /*
-    outputArea.appendChild(imgOut);
+    //outputArea.appendChild(imgOut);
     
     if ( imgWidth > 700){
       imgOut.setAttribute("class", "imgScale");
     }
-    */
+    
     // prepend child
     outputArea.insertBefore(imgOut, outputArea.firstChild);
 }
@@ -119,7 +117,7 @@ window.onload = function(){
                // Create visible image
                var img2 = new Image();
                img2.src = img.src;
-               img2.setAttribute("class", "imgScale");
+               img2.setAttribute("class", "imgScaleMax");
                // Add the image to the page.
                fileDisplayArea.appendChild(img2);
            }
