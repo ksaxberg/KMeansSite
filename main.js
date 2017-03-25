@@ -77,10 +77,18 @@ function runKMeans(){
     //imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
     //TODO: Need to take the output matrix to the image
     context.putImageData(imgData, 0, 0);
-    imgOut.src = canvas.toDataURL(); // full quality
-    outputArea.appendChild(imgOut);
+    imgOut.src = canvas.toDataURL("image/jpeg"); // full quality
     imgOut.setAttribute("class", "imgScale");
-
+    // Placing the child 
+    /*
+    outputArea.appendChild(imgOut);
+    
+    if ( imgWidth > 700){
+      imgOut.setAttribute("class", "imgScale");
+    }
+    */
+    // prepend child
+    outputArea.insertBefore(imgOut, outputArea.firstChild);
 }
 
 
@@ -102,17 +110,22 @@ window.onload = function(){
            reader.onload = function(e) {
                fileDisplayArea.innerHTML = "";
 
-               // Create a new image.
+               // Create a new image, preserve data
                img = new Image();
                // Set the img src property using the data URL.
                img.src = reader.result;
-               img.setAttribute("class", "imgScale");
+               img.setAttribute("class", "imgInput");
                
+               // Create visible image
+               var img2 = new Image();
+               img2.src = img.src;
+               img2.setAttribute("class", "imgScale");
                // Add the image to the page.
-               fileDisplayArea.appendChild(img);
+               fileDisplayArea.appendChild(img2);
            }
                                
            reader.readAsDataURL(file);
+           
        }
        else {
        fileDisplayArea.innerHTML = "File not supported!";
