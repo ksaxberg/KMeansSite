@@ -22,44 +22,24 @@ function runKMeans(){
     var imageData = context.getImageData(0, 0, imgWidth, imgHeight);
     var data = imageData.data;
     
-    //fill matrix with nothing
+    var curPixel = 0;
+    //populate matrix with pixel data
     for (var i = 0; i < imgWidth; i++){
         matrix[i] = new Array();
         for(var j = 0; j < imgHeight; j++){
             matrix[i][j] = new Array();
-        }
-    }
-    
-    var curPixel = 0;
-    
-    //populate matrix with pixel data
-    for(var i = 0; i < imgWidth; i++){
-        for(var j = 0; j < imgHeight; j++){
             for(var k = 0; k < 4; k++){
                 matrix[i][j].push(data[curPixel]);
                 curPixel++;
             }
         }
     }
-    if(debug){    
-        console.log('first pixel: red: ' + matrix[0][0][0]);
-        console.log(imgWidth);
-        console.log(imgHeight);
-        console.log(matrix.length);
-        console.log(matrix[0].length);
-        console.log(matrix[0][0].length);
-        console.log((imgWidth/2)-1);
-        console.log((imgHeight/2)-1);
-        //console.log('last pixel: red: ' + matrix[260][260][0]);
-        //console.log('last pixel: green: ' + matrix[260][260][1]);
-        //console.log('last pixel: blue: ' + matrix[260][260][2]);
-    }
     
     matrix = kmeans(matrix, kVal, T, lambda);
     
     if(debug){console.log("kmeans finished")};
     
-    var imgData = new ImageData(imgWidth, imgHeight);
+    var imgData = context.createImageData(imgWidth, imgHeight);
     curPixel = 0;
     
     //write matrix into 1D array
@@ -71,27 +51,21 @@ function runKMeans(){
             }
         }
     }
-    
+    context.putImageData(imgData, 0, 0);
+
     var outputArea = document.getElementById("processedImageDisplayArea");
     var imgOut = document.createElement("img");
     //imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
-    //TODO: Need to take the output matrix to the image
-    context.putImageData(imgData, 0, 0);
     imgOut.src = canvas.toDataURL("image/jpeg"); // full quality
+
     // Placing the child 
     //outputArea.appendChild(imgOut);
-    
-    if ( imgWidth > 700){
-      imgOut.setAttribute("class", "imgScale");
-    }
-    
+    if ( imgWidth > 700){imgOut.setAttribute("class", "imgScale");}
     // prepend child
     outputArea.insertBefore(imgOut, outputArea.firstChild);
 }
 
-
 var img;
-
 var debug = false;
 
 window.onload = function(){
