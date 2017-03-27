@@ -11,6 +11,31 @@ body {
     padding: 5px;
     border-radius: 5px;
 }
+#uploadImageDisplayArea{
+	text-align: center;
+}
+
+#processedImageDisplayArea{
+	text-align: center;
+}
+#contentUpload{
+	padding: 5px;
+	border: solid 3px #ececec;
+	border-radius: 5px;
+}
+
+#contentUpload input[type="text"]{
+	padding: 0px;
+	margin: 3px;
+	border: solid 3px #c9c9c9;
+	transition: border 0.3s;
+}
+#contentUpload input[type="text"]:focus, #contentUpload input[type="text"].focus{
+	padding: 0px;
+	margin: 3px;
+	border: solid 3px #969696;
+}
+
 footer{
     text-align: center;
 }
@@ -19,7 +44,6 @@ footer{
     width: 700px;
 }
 .imgScaleMax {
-
 	max-width: 700px;
 }
 
@@ -28,6 +52,5 @@ footer{
 }
 
 #myCanvas{
-	visibility: hidden;
 	display: none;
 }

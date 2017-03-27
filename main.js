@@ -1,10 +1,29 @@
 
 
 function runKMeans(){
-    
+    // Clear error area of messages
+    var errorArea = document.getElementById("errorMessages");
+    errorArea.innerHTML = "";
+
     var kVal = parseInt(document.getElementById("kForKMeans").value);
     var T = parseInt(document.getElementById("iterForKMeans").value);
-    var lambda = parseInt(document.getElementById("lambdaForKMeans").value);
+    // Check if image in memory
+    if (!imageLoaded){
+      var error = document.createElement("p");
+      error.innerHTML = "Please select an image to be manipulated.";
+      errorArea.appendChild(error);
+      return;
+    }
+    // Rough value check for T and K
+    if(isNaN(kVal) || isNaN(T)){
+      var error = document.createElement("p");
+      error.innerHTML = "Please enter a number for K and for iteration";
+      errorArea.appendChild(error);
+      return;
+    } 
+    // Removed the weighting option on pixel distance, could not reconcile banding
+    //var lambda = parseFloat(document.getElementById("lambdaForKMeans").value);
+    var lambda = 0;
     if(debug){
         console.log("kVal: " + kVal);
         console.log('running kmeans');
@@ -19,8 +38,7 @@ function runKMeans(){
     
     context.drawImage(img, 0, 0);
     
-    var imageData = context.getImageData(0, 0, imgWidth, imgHeight);
-    var data = imageData.data;
+    var data = context.getImageData(0, 0, imgWidth, imgHeight).data;
     
     var curPixel = 0;
     //populate matrix with pixel data
@@ -36,6 +54,7 @@ function runKMeans(){
     }
     
     matrix = kmeans(matrix, kVal, T, lambda);
+    //matrix = invert(matrix);
     
     if(debug){console.log("kmeans finished")};
     
@@ -56,7 +75,7 @@ function runKMeans(){
     var outputArea = document.getElementById("processedImageDisplayArea");
     var imgOut = document.createElement("img");
     //imgOut.src = canvas.toDataURL('image/jpeg', 1.0); // full quality
-    imgOut.src = canvas.toDataURL("image/jpeg"); // full quality
+    imgOut.src = canvas.toDataURL("image/jpeg", 1.0); // full quality
 
     // Placing the child 
     //outputArea.appendChild(imgOut);
@@ -67,6 +86,7 @@ function runKMeans(){
 
 var img;
 var debug = false;
+var imageLoaded = false;
 
 window.onload = function(){
     var fileInput = document.getElementById('imageInput');
@@ -87,6 +107,7 @@ window.onload = function(){
                // Set the img src property using the data URL.
                img.src = reader.result;
                img.setAttribute("class", "imgInput");
+               imageLoaded = true;
                
                // Create visible image
                var img2 = new Image();
@@ -101,6 +122,7 @@ window.onload = function(){
        }
        else {
        fileDisplayArea.innerHTML = "File not supported!";
+       imageLoaded = false;
        }
     });
 };

@@ -4,11 +4,13 @@
 <link rel="stylesheet" href="styles.css">
 
 <script type="text/javascript" src="kmeans.js"></script>
+<script type="text/javascript" src="invert.js"></script>
 <script type="text/javascript" src="main.js"></script>
 </head>
 <body>
 <div id="main">
     <!-- Display image that has been uploaded at top of page -->
+    <h1>KMeans.Online</h1>
     <h3>Original:</h3>
     <pre id="uploadImageDisplayArea">
     </pre>
@@ -17,12 +19,13 @@
     <div id="contentUpload" >
         
         <input type="file" id="imageInput">
-
-        K for KMeans: <input id="kForKMeans" type="text" name="k"><br>
-        Number of Iterations for KMeans: <input id="iterForKMeans" type="text" name="iter"><br>
-        Lambda for KMeans: <input id="lambdaForKMeans" type="text" name="lambda"><br>
+        <br>
+        K (number of clusters): <input id="kForKMeans" type="text" placeholder="5" name="k"><br>
+        Iteration Count: <input id="iterForKMeans" type="text" placeholder="5" name="iter"><br>
+        <!-- Lambda for KMeans: <input id="lambdaForKMeans" type="text" name="lambda"><br>-->
         <button type="button" onclick="runKMeans()">Run KMeans</button>
     </div>
+    <div id="errorMessages"></div>
 
     <!--  Display Processed Image below input    -->
     
@@ -32,7 +35,12 @@
     </div>
 </div>
 <footer>
-PLACEHOLDER: Explanation here of variables and purpose of site.
+A simple tool for running the K-Means Agglomerative Clustering method on an image.<br>
+Current implementation allows for the selection of the number of clusters, K, as well as the size of iteration.<br>
+Clustering is implemented solely with color, beginning with K different colors selected from the image. <br>
+<br>
+For other desired features or inquiries contact: <br>
+inquiries@kmeans.online
 </footer>
 </body>
 </html>
