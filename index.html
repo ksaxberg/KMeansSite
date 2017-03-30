@@ -21,7 +21,7 @@
 
     <!-- Selection and Navigation -->
     <div id="contentUpload" >
-        <div id="contentLeftSide">
+        <div id="contentLeftSide" >
             <input type="file" id="imageInput">
             <br>
             K (number of clusters): <input id="kForKMeans" type="text" placeholder="5" name="k"><br>
@@ -30,7 +30,7 @@
             <button type="button" onclick="runKMeans()">Run KMeans</button>
             <button type="button" onclick="showMore()">Show More </button>
         </div>
-        <div id="contentRightSide">
+        <div id="contentRightSide" style="visibility: hidden;">
             <br>
             <button type="button" onclick="manipulateImg(invert)">Invert Image</button><br>
             <button type="button" onclick="manipulateImg(rotateRGB)">Rotate Colors</button><br>

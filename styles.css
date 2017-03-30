@@ -31,6 +31,7 @@ body {
 
 #contentRightSide{
 	float: right;
+	/*visibility: hidden;*/
 }
 
 #contentUpload input[type="text"]{

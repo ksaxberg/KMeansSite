@@ -1,10 +1,10 @@
 
 function showMore(){
   var options = document.getElementById("contentRightSide");
-  if (options.style.display == "none"){
-    options.style.display = "initial";
+  if (options.style.visibility == "hidden"){
+    options.style.visibility = "inherit";
   } else{
-    options.style.display = "none"
+    options.style.visibility = "hidden";
   }
 }
 
