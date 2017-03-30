@@ -136,6 +136,11 @@ function runKMeans(){
         }
     }
     context.putImageData(imgData, 0, 0);
+    var resultsTag = document.getElementById("resultsTag");
+    if(resultsTag.style.display == "none"){
+      resultsTag.style.display = "inherit";
+    }
+
 
     var outputArea = document.getElementById("processedImageDisplayArea");
     var imgOut = document.createElement("img");
@@ -183,6 +188,7 @@ window.onload = function(){
                img2.setAttribute("id", "viewableImage");
                img2.setAttribute("class", "imgScaleMax");
                // Add the image to the page.
+               document.getElementById("originalTag").style.display = "inherit";
                fileDisplayArea.appendChild(img2);
            }
                                
