@@ -1,11 +1,15 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <title>K Means Site</title>
 <link rel="stylesheet" href="styles.css">
 
 <script type="text/javascript" src="kmeans.js"></script>
 <script type="text/javascript" src="invert.js"></script>
+<script type="text/javascript" src="rotateRGB.js"></script>
+<script type="text/javascript" src="switchRG.js"></script>
 <script type="text/javascript" src="main.js"></script>
+<meta charset="utf-8"/>
 </head>
 <body>
 <div id="main">
@@ -17,13 +21,21 @@
 
     <!-- Selection and Navigation -->
     <div id="contentUpload" >
-        
-        <input type="file" id="imageInput">
-        <br>
-        K (number of clusters): <input id="kForKMeans" type="text" placeholder="5" name="k"><br>
-        Iteration Count: <input id="iterForKMeans" type="text" placeholder="5" name="iter"><br>
-        <!-- Lambda for KMeans: <input id="lambdaForKMeans" type="text" name="lambda"><br>-->
-        <button type="button" onclick="runKMeans()">Run KMeans</button>
+        <div id="contentLeftSide">
+            <input type="file" id="imageInput">
+            <br>
+            K (number of clusters): <input id="kForKMeans" type="text" placeholder="5" name="k"><br>
+             Iteration Count: <input id="iterForKMeans" type="text" placeholder="5" name="iter"><br>
+            <!-- Lambda for KMeans: <input id="lambdaForKMeans" type="text" name="lambda"><br>-->
+            <button type="button" onclick="runKMeans()">Run KMeans</button>
+            <button type="button" onclick="showMore()">Show More </button>
+        </div>
+        <div id="contentRightSide">
+            <br>
+            <button type="button" onclick="manipulateImg(invert)">Invert Image</button><br>
+            <button type="button" onclick="manipulateImg(rotateRGB)">Rotate Colors</button><br>
+            <button type="button" onclick="manipulateImg(switchRG)">Switch Red/Green Channel</button>
+        </div>
     </div>
     <div id="errorMessages"></div>
 

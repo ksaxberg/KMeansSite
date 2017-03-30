@@ -1,4 +1,69 @@
 
+function showMore(){
+  var options = document.getElementById("contentRightSide");
+  if (options.style.display == "none"){
+    options.style.display = "initial";
+  } else{
+    options.style.display = "none"
+  }
+}
+
+function manipulateImg(method){
+  var mat = imageToMatrix();
+  mat = method(mat);
+  matrixToImage(mat);
+  //matrixToImage(method(imageToMatrix()));
+}
+
+function imageToMatrix(){
+  var canvas = document.getElementById('myCanvas');
+  var context = canvas.getContext('2d');
+  var matrix = new Array();
+  context.canvas.width = img.width;
+  context.canvas.height = img.height;
+    
+  context.drawImage(img, 0, 0);
+    
+  var data = context.getImageData(0, 0, img.width, img.height).data;
+    
+  var curPixel = 0;
+  //populate matrix with pixel data
+  for (var i = 0; i < img.width; i++){
+      matrix[i] = new Array();
+      for(var j = 0; j < img.height; j++){
+          matrix[i][j] = new Array();
+          for(var k = 0; k < 4; k++){
+              matrix[i][j].push(data[curPixel]);
+              curPixel++;
+          }
+      }
+  }
+  return matrix;
+}
+
+function matrixToImage(matrix){
+  var canvas = document.getElementById('myCanvas');
+  var context = canvas.getContext('2d');
+  var imgData = context.createImageData(img.width, img.height);
+    curPixel = 0;
+    
+    //write matrix into 1D array
+    for(var i = 0; i < img.width; i++){
+        for(var j = 0; j < img.height; j++){
+            for(var k = 0; k < 4; k++){
+                imgData.data[curPixel] = matrix[i][j][k];
+                curPixel++;
+            }
+        }
+    }
+    context.putImageData(imgData, 0, 0);
+    //var imgOut = document.createElement("img");
+    img.src = canvas.toDataURL("image/jpeg", 1.0);
+    var img2 = document.getElementById("viewableImage");
+    img2.src = img.src;
+    //using global var for output
+    //img.src = imgOut.src;
+}
 
 function runKMeans(){
     // Clear error area of messages
@@ -84,6 +149,9 @@ function runKMeans(){
     outputArea.insertBefore(imgOut, outputArea.firstChild);
 }
 
+
+
+
 var img;
 var debug = false;
 var imageLoaded = false;
@@ -112,6 +180,7 @@ window.onload = function(){
                // Create visible image
                var img2 = new Image();
                img2.src = img.src;
+               img2.setAttribute("id", "viewableImage");
                img2.setAttribute("class", "imgScaleMax");
                // Add the image to the page.
                fileDisplayArea.appendChild(img2);
