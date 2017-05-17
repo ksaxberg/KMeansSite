@@ -109,6 +109,17 @@ function partitionImage(k, lambda, rows, cols, matrix, clusters){
         // Remove that size , the last element of the array
         pixelsSum[i].pop()
     }
+    if (lambda != 0){
+        //Update color not with average, but by polling image pixel
+        pixelsSum.forEach(function(x){
+		var i = x[0];
+		var j = x[1];
+		var colors = matrix[i][j];
+		x[2] = colors[0];
+		x[3] = colors[1];
+		x[4] = colors[2];
+	});
+    }
     return pixelsSum;
 }
 
