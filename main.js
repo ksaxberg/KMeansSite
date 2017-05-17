@@ -87,8 +87,8 @@ function runKMeans(){
       return;
     } 
     // Removed the weighting option on pixel distance, could not reconcile banding
-    var lambda = parseFloat(document.getElementById("lambdaForKMeans").value);
-    //var lambda = 0;
+    //var lambda = parseFloat(document.getElementById("lambdaForKMeans").value);
+    var lambda = 0;
     if(debug){
         console.log("kVal: " + kVal);
         console.log('running kmeans');

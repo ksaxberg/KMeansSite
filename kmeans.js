@@ -109,6 +109,7 @@ function partitionImage(k, lambda, rows, cols, matrix, clusters){
         // Remove that size , the last element of the array
         pixelsSum[i].pop()
     }
+    // TODO: This is not how it should be... any this didn't even fix the image issue!
     if (lambda != 0){
         //Update color not with average, but by polling image pixel
         pixelsSum.forEach(function(x){
